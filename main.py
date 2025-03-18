@@ -15,8 +15,9 @@ EXEC VERSION 41.0
 NO HOLOTAPE FOUND
 LOAD ROM(1): DEITRIX 303'''
 
-def split_text(text, part_size):
+def split_text(text, segment):
     """Incrementally adds parts to the list."""
+    part_size = len(text) // segment
     result = []
     for i in range(0, len(text), part_size):
         result.append(text[:i + part_size])  # Just build up text, no cursor yet
@@ -48,10 +49,7 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
         pil_image.paste((0, 0, 0), [0, 0, width, height])  # Clear to black
         
         # Add blinking cursor every even frame
-        if i % 2 == 0:
-            text = part + "█"  # Add cursor
-        else:
-            text = part  # No cursor
+        text = part + "█" if i % 2 == 0 else part
 
         # Split the text into lines if there are any line breaks
         lines = text.split('\n')
@@ -79,8 +77,10 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
     cv2.destroyAllWindows()
 
 def main():
-    text_parts = split_text(terminal_string, 10)
-    display_terminal(text_parts)
+    # TODO: Set a duration and manage cursor blink logic
+    text_parts = split_text(terminal_string,7)
+    print(len(text_parts))
+    display_terminal(text_parts, 0.5)
 
 if __name__ == "__main__":
     main()
