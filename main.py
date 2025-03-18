@@ -5,7 +5,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 # Define the terminal string
-terminal_string = '''********* NOBARA-LINUX V41.0.0 **********
+terminal_string = """********* NOBARA-LINUX V41.0.0 **********
+
 
 COPYRIGHT 2075 ROBCO(R)
 LOADER V6.13.7
@@ -13,15 +14,17 @@ EXEC VERSION 41.0
 64k RAM SYSTEM
 38911 BYTES FREE
 NO HOLOTAPE FOUND
-LOAD ROM(1): DEITRIX 303'''
+LOAD ROM(1): DEITRIX 303"""
+
 
 def split_text(text, segment):
     """Incrementally adds parts to the list."""
     part_size = len(text) // segment
     result = []
     for i in range(0, len(text), part_size):
-        result.append(text[:i + part_size])  # Just build up text, no cursor yet
+        result.append(text[: i + part_size])  # Just build up text, no cursor yet
     return result
+
 
 def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
     """Displays text progressively with a blinking cursor effect in an OpenCV window."""
@@ -47,12 +50,12 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
     for i, part in enumerate(text_list):
         # Clear the image at the start of each iteration (overwrite previous frame)
         pil_image.paste((0, 0, 0), [0, 0, width, height])  # Clear to black
-        
+
         # Add blinking cursor every even frame
         text = part + "█" if i % 2 == 0 else part
 
         # Split the text into lines if there are any line breaks
-        lines = text.split('\n')
+        lines = text.split("\n")
 
         # Render each line on the same position (override the previous)
         for line in lines:
@@ -69,18 +72,20 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
         key = cv2.waitKey(int(delay * 1000))  # Convert seconds to milliseconds
         if key == 27:  # Exit if ESC is pressed
             break
-        
+
         # Reset y_position for the next iteration
         y_position = 50
 
     # Close the window
     cv2.destroyAllWindows()
 
+
 def main():
     # TODO: Set a duration and manage cursor blink logic
-    text_parts = split_text(terminal_string,7)
+    text_parts = split_text(terminal_string, 7)
     print(len(text_parts))
     display_terminal(text_parts, 0.5)
+
 
 if __name__ == "__main__":
     main()
