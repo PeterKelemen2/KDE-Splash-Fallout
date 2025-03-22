@@ -16,7 +16,7 @@ def split_text(text, segment):
     return result
 
 
-def display_terminal(text, font_path="FSEX302.ttf", font_size=30, fps = 30, text_dur = 1, blink_dur = 5):
+def display_terminal(text, font_path="FSEX302.ttf", font_size=30, fps = 30, text_dur = 1, blink_dur = 1):
     """Displays text progressively with a blinking cursor effect in an OpenCV window."""
     # Create a black image to display text
     frame_count = fps * text_dur
@@ -26,7 +26,7 @@ def display_terminal(text, font_path="FSEX302.ttf", font_size=30, fps = 30, text
 
     text_list = split_text(text, frame_count)
 
-    width, height = 1400, 700
+    width, height = 1280, 720
     image = np.zeros((height, width, 3), dtype=np.uint8)
 
     # Load the font
@@ -134,8 +134,17 @@ def display_terminal(text, font_path="FSEX302.ttf", font_size=30, fps = 30, text
         aux_frame_index += 1
         y_position = 50  # Reset Y position
 
+    print("Started saving gif...")
     pil_frames = [Image.fromarray(frame) for frame in frame_list]
-    pil_frames[0].save("output.gif", save_all=True, append_images=pil_frames[1:], duration=1000 / fps, loop=0)
+    pil_frames[0].save(
+        "output.gif",
+        save_all=True,
+        append_images=pil_frames[1:],
+        duration=1000 / fps,  # Frame duration
+        loop=0,               # Loop the GIF once
+        optimize=True,        # Optimize the image
+        quality=95            # Set quality (lower value = smaller file size, but lower quality)
+    )
     print("Saving finished!")
 
 

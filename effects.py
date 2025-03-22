@@ -99,3 +99,4 @@ def apply_glow(draw_image, text, position, font, glow_color=(0, 255, 0, 128), in
     # Draw the original text on top
     draw = ImageDraw.Draw(draw_image)  # Redraw the original text
     draw.text((x, y), text, font=font, fill=glow_color[:3])  # Drop alpha for main text
+
