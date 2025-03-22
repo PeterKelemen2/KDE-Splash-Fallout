@@ -1,0 +1,24 @@
+from enum import Enum
+
+class Config_Enum(Enum):
+    RES_X = 0,
+    RES_Y = 1,
+    FPS = 2,
+    TAB = 3,
+    TAB_LENGTH = 4,
+    FONT_NAME = 5,
+    FONT_PATH = 6,
+    FONT_SIZE = 7,
+    DURATION_TEXT = 8,
+    DURATION_CURSOR = 9,
+    EFFECT_WARP_INTENSITY = 10,
+    EFFECT_SCANLINE_INTENSITY = 11,
+    EFFECT_NOISE_INTENSITY = 12,
+    EFFECT_GLOW_INTENSITY = 13
+    OVERRIDE_LINUX = 14,
+    OVERRIDE_KERNEL = 15,
+    OVERRIDE_DE = 16,
+    OVERRIDE_BASH = 17,
+    OVERRIDE_PHYS_MEM = 18,
+
+
