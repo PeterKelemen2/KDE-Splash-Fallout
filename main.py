@@ -73,13 +73,9 @@ def main():
     terminal_string = info.create_terminal_string()
     print(terminal_string)
 
-    frames = 50
-    dur_sec = 3
-
+    frames, dur_sec = 50, 3
     text_parts = split_text(terminal_string, frames)
-    print(len(text_parts))
     display_terminal(text_parts, dur_sec / frames)
-    info.get_system_info()
 
 
 if __name__ == "__main__":
