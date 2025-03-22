@@ -3,6 +3,7 @@ import time
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+import info
 
 # Define the terminal string
 terminal_string = """********* NOBARA-LINUX V41.0.0 **********
@@ -84,7 +85,8 @@ def main():
     # TODO: Set a duration and manage cursor blink logic
     text_parts = split_text(terminal_string, 7)
     print(len(text_parts))
-    display_terminal(text_parts, 0.5)
+    # display_terminal(text_parts, 0.5)
+    info.get_system_info()
 
 
 if __name__ == "__main__":
