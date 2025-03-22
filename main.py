@@ -15,12 +15,12 @@ def split_text(text, segment):
     return result
 
 
-def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size=20):
+def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size=30):
     """Displays text progressively with a blinking cursor effect in an OpenCV window."""
     # Create a black image to display text
     text_list = split_text(text, frames)
 
-    height, width = 500, 1000  # Image size
+    width, height = 1400, 700
     image = np.zeros((height, width, 3), dtype=np.uint8)
 
     # Load the font
@@ -38,9 +38,11 @@ def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size
     y_position = 50  # Fixed Y position (don't center vertically)
     line_height = font_size * 1.5  # Distance between lines
 
-    # first_line_width = draw.textbbox((0, 0), text_list[0], font=font)[2]
     first_line_width = draw.textbbox((0, 0), text.split("\n")[0], font=font)[2]
     x_position = (width - first_line_width) // 2
+
+    cv2.imshow("Terminal", image)
+    cv2.moveWindow("Terminal", 1920 + (1920 - width) // 2, 100)
 
     for i, part in enumerate(text_list):
         # Clear the image
