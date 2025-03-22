@@ -21,7 +21,7 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
     height, width = 500, 1000  # Image size
     image = np.zeros((height, width, 3), dtype=np.uint8)
 
-    # Load the Fixedsys font using Pillow
+    # Load the font
     try:
         font = ImageFont.truetype(font_path, size=20)
     except IOError:
@@ -32,45 +32,58 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
     pil_image = Image.fromarray(image)
     draw = ImageDraw.Draw(pil_image)
 
-    font_color = (0, 255, 0)  # Green color text
-    y_position = 50  # Start Y position for the text
+    font_color = (0, 255, 0)  # Green text
+    y_position = 50  # Fixed Y position (don't center vertically)
     line_height = 30  # Distance between lines
 
     for i, part in enumerate(text_list):
-        # Clear the image at the start of each iteration (overwrite previous frame)
-        pil_image.paste((0, 0, 0), [0, 0, width, height])  # Clear to black
+        # Clear the image
+        pil_image.paste((0, 0, 0), [0, 0, width, height])
 
         # Add blinking cursor every even frame
-        text = part + "█" if i % 2 == 0 else part
+        text = part
+        # text = part + "█" if i % 2 == 0 else part
 
-        # Split the text into lines if there are any line breaks
+        # Split text into lines
         lines = text.split("\n")
 
-        # Render each line on the same position (override the previous)
         for line in lines:
-            draw.text((30, y_position), line, font=font, fill=font_color)
+            # Get text width for centering on X-axis
+            text_width = draw.textbbox((0, 0), line, font=font)[2]  
+
+            # Calculate X position to center the text
+            x_position = (width - text_width) // 2
+
+            # Draw text at (centered X, fixed Y)
+            draw.text((x_position, y_position), line, font=font, fill=font_color)
             y_position += line_height  # Move to next line
 
-        # Convert the image back to a NumPy array for OpenCV
+        # Convert back to OpenCV format and show
         image = np.array(pil_image)
-
-        # Show the image in a window
         cv2.imshow("Terminal", image)
 
-        # Wait for the specified delay (milliseconds)
-        key = cv2.waitKey(int(delay * 1000))  # Convert seconds to milliseconds
-        if key == 27:  # Exit if ESC is pressed
+        # Delay for effect
+        key = cv2.waitKey(int(delay * 1000))
+        if key == 27:  # ESC to exit
             break
 
-        # Reset y_position for the next iteration
-        y_position = 50
+        # Reset Y position for the next frame
+        y_position = 50  
 
-    # Close the window
+    # Keep window open after completing the text display
+    while True:
+        key = cv2.waitKey(1)  # Wait for any key press
+        if key != -1:  # Exit the window on any key press
+            break
+
+    # Close window
     cv2.destroyAllWindows()
 
 
+
+
 def main():
-    terminal_string = info.create_terminal_string()
+    terminal_string = info.create_terminal_string(same_length=True)
     print(terminal_string)
 
     frames, dur_sec = 50, 3
