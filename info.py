@@ -70,12 +70,13 @@ def create_terminal_string(same_length=False, tab=False, tab_length = 4):
         f"******** {sys_info.get(Info.LINUX).upper()} ********",
         "",
         f"{tab_string}COPYRIGHT 2075 ROBCO(R)",
-        f"{tab_string}{sys_info.get(Info.KERNEL).upper()}",
-        f"{tab_string}EXEC VERSION {sys_info.get(Info.BASH).upper()}",
+        f"{tab_string}KERNEL {sys_info.get(Info.KERNEL).upper()}",
+        f"{tab_string}BASH VERSION {sys_info.get(Info.BASH).upper()}",
         f"{tab_string}{sys_info.get(Info.PHYS_MEM).upper()} RAM SYSTEM",
         f"{tab_string}{sys_info.get(Info.DE).upper()}",
         f"{tab_string}NO HOLOTAPE FOUND",
         f"{tab_string}LOAD ROM(1): DEITRIX 303",
+        "",
         ""
     ]
 

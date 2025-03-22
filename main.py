@@ -15,15 +15,17 @@ def split_text(text, segment):
     return result
 
 
-def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
+def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size=20):
     """Displays text progressively with a blinking cursor effect in an OpenCV window."""
     # Create a black image to display text
+    text_list = split_text(text, frames)
+
     height, width = 500, 1000  # Image size
     image = np.zeros((height, width, 3), dtype=np.uint8)
 
     # Load the font
     try:
-        font = ImageFont.truetype(font_path, size=20)
+        font = ImageFont.truetype(font_path, size=font_size)
     except IOError:
         print("Font not found, using default.")
         font = ImageFont.load_default()
@@ -34,7 +36,11 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
 
     font_color = (0, 255, 0)  # Green text
     y_position = 50  # Fixed Y position (don't center vertically)
-    line_height = 30  # Distance between lines
+    line_height = font_size * 1.5  # Distance between lines
+
+    # first_line_width = draw.textbbox((0, 0), text_list[0], font=font)[2]
+    first_line_width = draw.textbbox((0, 0), text.split("\n")[0], font=font)[2]
+    x_position = (width - first_line_width) // 2
 
     for i, part in enumerate(text_list):
         # Clear the image
@@ -48,12 +54,6 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
         lines = text.split("\n")
 
         for line in lines:
-            # Get text width for centering on X-axis
-            text_width = draw.textbbox((0, 0), line, font=font)[2]  
-
-            # Calculate X position to center the text
-            x_position = (width - text_width) // 2
-
             # Draw text at (centered X, fixed Y)
             draw.text((x_position, y_position), line, font=font, fill=font_color)
             y_position += line_height  # Move to next line
@@ -68,7 +68,7 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
             break
 
         # Reset Y position for the next frame
-        y_position = 50  
+        y_position = 50
 
     # Keep window open after completing the text display
     while True:
@@ -80,15 +80,12 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
     cv2.destroyAllWindows()
 
 
-
-
 def main():
-    terminal_string = info.create_terminal_string(same_length=True, tab=True)
+    terminal_string = info.create_terminal_string(tab=True, tab_length=2)
     print(terminal_string)
 
-    frames, dur_sec = 50, 3
-    text_parts = split_text(terminal_string, frames)
-    display_terminal(text_parts, dur_sec / frames)
+    frames, dur_sec = 50, 2
+    display_terminal(terminal_string, frames, dur_sec / frames)
 
 
 if __name__ == "__main__":
