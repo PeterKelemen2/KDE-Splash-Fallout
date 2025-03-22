@@ -5,18 +5,6 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import info
 
-# Define the terminal string
-terminal_string = """********* NOBARA-LINUX V41.0.0 **********
-
-
-COPYRIGHT 2075 ROBCO(R)
-LOADER V6.13.7
-EXEC VERSION 41.0
-64k RAM SYSTEM
-38911 BYTES FREE
-NO HOLOTAPE FOUND
-LOAD ROM(1): DEITRIX 303"""
-
 
 def split_text(text, segment):
     """Incrementally adds parts to the list."""
@@ -82,10 +70,15 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
 
 
 def main():
-    # TODO: Set a duration and manage cursor blink logic
-    text_parts = split_text(terminal_string, 7)
+    terminal_string = info.create_terminal_string()
+    print(terminal_string)
+
+    frames = 50
+    dur_sec = 3
+
+    text_parts = split_text(terminal_string, frames)
     print(len(text_parts))
-    # display_terminal(text_parts, 0.5)
+    display_terminal(text_parts, dur_sec / frames)
     info.get_system_info()
 
 
