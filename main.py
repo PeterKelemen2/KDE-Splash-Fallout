@@ -16,7 +16,7 @@ def split_text(text, segment):
     return result
 
 
-def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size=30):
+def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size=30, fps = 30, text_dur = 2, blink_dur = 2):
     """Displays text progressively with a blinking cursor effect in an OpenCV window."""
     # Create a black image to display text
     text_list = split_text(text, frames)
@@ -65,7 +65,7 @@ def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size
         image = np.array(pil_image)
         warped_image = effects.apply_crt_warp(image)
         scanlined_image = effects.apply_scanlines_with_noise(warped_image)
-        
+
         cv2.imshow("Terminal", scanlined_image)
 
         # Delay for effect
@@ -90,8 +90,10 @@ def main():
     terminal_string = info.create_terminal_string(tab=True, tab_length=2)
     print(terminal_string)
 
-    frames, dur_sec = 50, 2
-    display_terminal(terminal_string, frames, dur_sec / frames)
+    fps = 60
+    dur_sec = 2
+    frames = fps * dur_sec
+    display_terminal(terminal_string, frames, dur_sec / frames, text_dur=dur_sec, blink_dur=dur_sec // 2)
 
 
 if __name__ == "__main__":
