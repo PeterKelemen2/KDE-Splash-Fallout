@@ -63,8 +63,10 @@ def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size
 
         # Convert back to OpenCV format and show
         image = np.array(pil_image)
-        image = effects.apply_crt_warp(image)
-        cv2.imshow("Terminal", image)
+        warped_image = effects.apply_crt_warp(image)
+        scanlined_image = effects.apply_scanlines_with_noise(warped_image)
+        
+        cv2.imshow("Terminal", scanlined_image)
 
         # Delay for effect
         key = cv2.waitKey(int(delay * 1000))

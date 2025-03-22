@@ -36,42 +36,40 @@ def apply_crt_warp(image, distortion=0.15):
     return crt_warped
 
 
-def add_crt_effect(image):
-    """Apply a CRT-like effect to an image (scanlines, slight distortion, and optional noise)."""
-
-    # Apply scanlines effect by drawing semi-transparent horizontal lines
-    scanline_height = 3
-    scanline_color = (255, 0, 0)  # Dark scanlines, but semi-transparent
-
-    # Create scanlines effect by drawing lines on the image
-    # for y in range(0, image.shape[0], scanline_height * 2):  # Every other line
-    # cv2.line(image, (0, y), (image.shape[1], y), scanline_color, thickness=scanline_height)
-
-    # Apply slight barrel distortion (simulating CRT curvature)
+def apply_scanlines(image, intensity=0.3):
+    """Applies a CRT-style scanline effect."""
     height, width = image.shape[:2]
-    center_x, center_y = width // 2, height // 2
 
-    # Get the distance from the center for each pixel
-    for y in range(height):
-        for x in range(width):
-            dx = x - center_x
-            dy = y - center_y
-            distance = np.sqrt(dx**2 + dy**2)
+    # Create a scanline pattern (alternating dark lines)
+    scanline = np.ones((height, width, 3), dtype=np.float32)
+    scanline[::2] *= 1 - intensity  # Darken every other row
 
-            # Apply distortion based on distance from the center (weaken the effect here)
-            factor = 1.0 + 0.00005 * distance  # Reduced the distortion factor
-            new_x = int(center_x + factor * dx)
-            new_y = int(center_y + factor * dy)
+    # Apply scanlines to the image
+    image = image.astype(np.float32) / 255.0  # Normalize image for blending
+    scanline_effect = (image * scanline) * 255.0
+    return scanline_effect.astype(np.uint8)
 
-            # Bound the new coordinates to the image dimensions
-            new_x = max(0, min(new_x, width - 1))
-            new_y = max(0, min(new_y, height - 1))
 
-            # Apply the pixel distortion
-            image[y, x] = image[new_y, new_x]
+def apply_scanlines_with_noise(image, scanline_intensity=0.3, noise_intensity=0.03):
+    """Applies CRT-style scanlines with noise to an image."""
+    height, width = image.shape[:2]
 
-    # Add noise (optional CRT static noise)
-    # noise = np.random.randint(0, 10, (height, width, 3), dtype=np.uint8)  # Reduced noise intensity
-    # image = cv2.addWeighted(image, 0.95, noise, 0.05, 0)  # Reduce the noise effect
+    # Create a scanline pattern (alternating dark lines)
+    scanline = np.ones((height, width, 3), dtype=np.float32)
+    scanline[::2] *= 1 - scanline_intensity  # Darken every other row
 
-    return image
+    # Generate random noise
+    noise = np.random.normal(0, noise_intensity, (height, width, 3)).astype(np.float32)
+
+    # Normalize image for blending
+    image = image.astype(np.float32) / 255.0
+
+    # Apply scanline effect
+    scanline_effect = image * scanline
+
+    # Apply noise
+    noisy_image = np.clip(
+        scanline_effect + noise, 0, 1
+    )  # Ensure values stay in valid range
+
+    return (noisy_image * 255).astype(np.uint8)
