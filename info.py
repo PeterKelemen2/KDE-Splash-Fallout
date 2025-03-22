@@ -61,19 +61,22 @@ def get_system_info():
     return system_info
 
 
-def create_terminal_string(same_length=False):
+def create_terminal_string(same_length=False, tab=False, tab_length = 4):
     sys_info = get_system_info()
     terminal_string = ""
+
+    tab_string = "" + (" " * tab_length) if tab else ""
     lines = [
         f"******** {sys_info.get(Info.LINUX).upper()} ********",
         "",
-        "   COPYRIGHT 2075 ROBCO(R)",
-        f"   {sys_info.get(Info.KERNEL).upper()}",
-        f"   EXEC VERSION {sys_info.get(Info.BASH).upper()}",
-        f"   {sys_info.get(Info.PHYS_MEM).upper()} RAM SYSTEM",
-        f"   {sys_info.get(Info.DE).upper()}",
-        "   NO HOLOTAPE FOUND",
-        "   LOAD ROM(1): DEITRIX 303",
+        f"{tab_string}COPYRIGHT 2075 ROBCO(R)",
+        f"{tab_string}{sys_info.get(Info.KERNEL).upper()}",
+        f"{tab_string}EXEC VERSION {sys_info.get(Info.BASH).upper()}",
+        f"{tab_string}{sys_info.get(Info.PHYS_MEM).upper()} RAM SYSTEM",
+        f"{tab_string}{sys_info.get(Info.DE).upper()}",
+        f"{tab_string}NO HOLOTAPE FOUND",
+        f"{tab_string}LOAD ROM(1): DEITRIX 303",
+        ""
     ]
 
     if same_length:

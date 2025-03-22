@@ -41,8 +41,8 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
         pil_image.paste((0, 0, 0), [0, 0, width, height])
 
         # Add blinking cursor every even frame
-        text = part
-        # text = part + "█" if i % 2 == 0 else part
+        # text = part
+        text = part + "█" if i % 2 == 0 else part
 
         # Split text into lines
         lines = text.split("\n")
@@ -83,7 +83,7 @@ def display_terminal(text_list, delay=0.5, font_path="FSEX302.ttf"):
 
 
 def main():
-    terminal_string = info.create_terminal_string(same_length=True)
+    terminal_string = info.create_terminal_string(same_length=True, tab=True)
     print(terminal_string)
 
     frames, dur_sec = 50, 3
