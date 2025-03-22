@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import info
 import effects
-
+import gif_config
 
 def split_text(text, segment):
     """Incrementally adds parts to the list."""
@@ -162,7 +162,11 @@ def main():
     terminal_string = info.create_terminal_string(tab=True, tab_length=2)
     print(terminal_string)
 
-    display_terminal(terminal_string)
+    # display_terminal(terminal_string)
+    # config = gif_config.Config()
+    config = gif_config.Config.from_json('config.json')
+    print(config.config_dict)
+
 
 
 if __name__ == "__main__":
