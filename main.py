@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import info
+import effects
 
 
 def split_text(text, segment):
@@ -40,7 +41,7 @@ def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size
 
     first_line_width = draw.textbbox((0, 0), text.split("\n")[0], font=font)[2]
     x_position = (width - first_line_width) // 2
-
+        
     cv2.imshow("Terminal", image)
     cv2.moveWindow("Terminal", 1920 + (1920 - width) // 2, 100)
 
@@ -62,6 +63,7 @@ def display_terminal(text, frames, delay=0.5, font_path="FSEX302.ttf", font_size
 
         # Convert back to OpenCV format and show
         image = np.array(pil_image)
+        image = effects.apply_crt_warp(image)
         cv2.imshow("Terminal", image)
 
         # Delay for effect
