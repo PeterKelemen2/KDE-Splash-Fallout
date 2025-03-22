@@ -2,6 +2,7 @@ from enum import Enum
 import os
 import platform
 import subprocess
+import gif_config
 
 
 class Info(Enum):
@@ -61,19 +62,29 @@ def get_system_info():
     return system_info
 
 
-def create_terminal_string(same_length=False, tab=False, tab_length = 4):
+def create_terminal_string(config: gif_config.Config, same_length=False):
+    tab = config.TAB
+    tab_length = config.TAB_LENGTH
+
     sys_info = get_system_info()
     terminal_string = ""
 
     tab_string = "" + (" " * tab_length) if tab else ""
+
+    linux_string = f"{config.OVERRIDE_LINUX.upper() if len(config.OVERRIDE_LINUX) > 0 else sys_info.get(Info.LINUX).upper()}"
+    kernel_string = f"{config.OVERRIDE_KERNEL.upper() if len(config.OVERRIDE_KERNEL) > 0 else sys_info.get(Info.KERNEL).upper()}"
+    de_string = f"{config.OVERRIDE_DE.upper() if len(config.OVERRIDE_DE) > 0 else sys_info.get(Info.DE).upper()}"
+    bash_string = f"{config.OVERRIDE_BASH.upper() if len(config.OVERRIDE_BASH) > 0 else sys_info.get(Info.BASH).upper()}"
+    mem_string = f"{config.OVERRIDE_PHYS_MEM.upper() if len(config.OVERRIDE_PHYS_MEM) > 0 else sys_info.get(Info.PHYS_MEM).upper()}"
+
     lines = [
-        f"******** {sys_info.get(Info.LINUX).upper()} ********",
+        f"******** {linux_string} ********",
         "",
         f"{tab_string}COPYRIGHT 2075 ROBCO(R)",
-        f"{tab_string}KERNEL {sys_info.get(Info.KERNEL).upper()}",
-        f"{tab_string}BASH VERSION {sys_info.get(Info.BASH).upper()}",
-        f"{tab_string}{sys_info.get(Info.PHYS_MEM).upper()} RAM SYSTEM",
-        f"{tab_string}{sys_info.get(Info.DE).upper()}",
+        f"{tab_string}KERNEL {kernel_string}",
+        f"{tab_string}BASH VERSION {bash_string}",
+        f"{tab_string}{mem_string} RAM SYSTEM",
+        f"{tab_string}{de_string}",
         f"{tab_string}NO HOLOTAPE FOUND",
         f"{tab_string}LOAD ROM(1): DEITRIX 303",
         "",
